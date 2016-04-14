@@ -6,3 +6,10 @@ def sign_up_correctly
   fill_in 'Password confirmation', with: 'password12345678'
   click_button 'Sign up'
 end
+
+def leave_review
+  click_link 'Review KFC'
+  fill_in "Thoughts", with: "so so"
+  select '3', from: 'Rating'
+  click_button 'Leave Review'
+end

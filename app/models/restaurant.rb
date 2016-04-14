@@ -8,4 +8,10 @@ class Restaurant < ActiveRecord::Base
     restaurant.user_id == user.id
   end
 
+  def build_review(attributes = {}, user)
+    review = reviews.build(attributes)
+    review.user = user_id
+    review
+  end
+
 end
