@@ -89,12 +89,24 @@ end
   end
 
   context 'deleting restaurants' do
-    before {Restaurant.create name: 'KFC'}
+
     scenario 'removes a restaurant when a user clicks a delete link' do
       sign_up_correctly
-      click_link 'Delete KFC'
-      expect(page).not_to have_content 'KFC'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'Subway'
+      click_button 'Create Restaurant'
+      click_link 'Delete Subway'
+      expect(page).not_to have_content 'Subway'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    before { Restaurant.create name: 'KFC' }
+
+    scenario 'user cannot delete another user\'s restaurant' do
+      sign_up_correctly
+      click_link 'Delete KFC'
+      expect(page).to have_content 'KFC'
+      expect(page).to have_content 'You cannot delete another user\'s restaurant.'
     end
   end
 end
