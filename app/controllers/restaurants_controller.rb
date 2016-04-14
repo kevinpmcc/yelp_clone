@@ -11,7 +11,8 @@ class RestaurantsController < ApplicationController
   end
 
   def create
-    @restaurant = Restaurant.new(restaurant_params)
+    @user = current_user
+    @restaurant = @user.restaurants.new(restaurant_params)
     if @restaurant.save
       redirect_to restaurants_path
     else
@@ -32,10 +33,14 @@ class RestaurantsController < ApplicationController
   end
 
   def update
+    @user = current_user
     @restaurant = Restaurant.find(params[:id])
-    @restaurant.update(restaurant_params)
-
-    redirect_to '/restaurants'
+    if @restaurant.belongs_to_user?(@restaurant, @user)
+      @restaurant.update(restaurant_params)
+    else
+      flash[:notice] = "You cannot edit another user's restaurant."
+    end
+    redirect_to restaurants_path
   end
 
   def destroy

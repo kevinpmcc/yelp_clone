@@ -23,7 +23,6 @@ feature 'restaurants' do
 
   context 'creating restaurants' do
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
-      visit '/restaurants'
       sign_up_correctly
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
@@ -65,24 +64,33 @@ end
 
   context 'editing restaurants' do
 
-    before { Restaurant.create name: 'KFC' }
-
     scenario 'let a user edit a restaurant' do
-      visit '/restaurants'
       sign_up_correctly
-      click_link 'Edit KFC'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'Subway'
+      click_button 'Create Restaurant'
+      click_link 'Edit Subway'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
       click_button 'Update Restaurant'
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(current_path).to eq '/restaurants'
     end
 
+    before { Restaurant.create name: 'KFC' }
+
+    scenario 'user cannot edit another user\'s restaurant' do
+      sign_up_correctly
+      click_link 'Edit KFC'
+      fill_in 'Name', with: 'Kentucky Fried Chicken'
+      click_button 'Update Restaurant'
+      expect(page).not_to have_content 'Kentucky Fried Chicken'
+      expect(page).to have_content 'You cannot edit another user\'s restaurant.'
+    end
   end
 
   context 'deleting restaurants' do
     before {Restaurant.create name: 'KFC'}
     scenario 'removes a restaurant when a user clicks a delete link' do
-      visit '/restaurants'
       sign_up_correctly
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
