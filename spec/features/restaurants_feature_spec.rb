@@ -13,11 +13,18 @@ feature 'restaurants' do
     before do
       Restaurant.create(name: 'KFC')
     end
+    context 'display restaurants' do
 
-    scenario 'display restaurants' do
-      visit '/restaurants'
-      expect(page).to have_content('KFC')
-      expect(page).not_to have_content('No restaurants yet')
+      scenario 'with name' do
+        visit '/restaurants'
+        expect(page).to have_content('KFC')
+        expect(page).not_to have_content('No restaurants yet')
+      end
+  
+      scenario 'with image' do
+        visit '/restaurants'
+        expect(page).to have_css('img', text: 'image1.jp')
+      end
     end
   end
 
