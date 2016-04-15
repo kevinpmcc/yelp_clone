@@ -20,10 +20,10 @@ feature 'restaurants' do
         expect(page).to have_content('KFC')
         expect(page).not_to have_content('No restaurants yet')
       end
-  
+
       scenario 'with image' do
         visit '/restaurants'
-        expect(page).to have_css('img', text: 'image1.jp')
+        expect(page).to have_css('img', text: 'image1.jpg')
       end
     end
   end
